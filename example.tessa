@@ -1,0 +1,88 @@
+// basic variable stuff
+let x: number = 0
+x += 1
+x = nil // will not compile!
+
+// nillable variables
+let x: string?
+x or= "asdf"
+x and= "qwerty"
+x = nil // ok!
+
+// control statements
+if x > 3 and x < 5 {
+	// do a thing
+} else {
+	// do a different
+}
+
+let i = 0
+while i < 10 {
+	i += 1
+}
+
+for i in range(0, 10) { // no numerical for
+	if i % 2 == 0 {
+		continue
+	}
+	print(i)
+}
+
+// functions
+add = (x: number, y: number): number -> {
+	return x + y
+}
+// implicit return
+add = (x: number, y: number): number -> {
+	x + y
+}
+
+// tables - same as lua
+let x: table = {
+	1, 2,
+	asdf = 3,
+	['qwerty'] = 4,
+	[true] = 5,
+}
+
+// type definitions
+type CoolTable = {
+	asdf: number,
+	qwerty: string?, // optional
+	zxcv: (x: number, y: number): number,
+	[number]: number or string, // means any number key must have a number or string value
+	[any]: any, // allows other key types not specified here
+}
+
+let x: CoolTable = {
+	1, 2, 'hi!',
+	asdf: 3,
+	zxcv: (x, y) -> {x + y} // types are inferred from CoolTable
+}
+
+// metatables
+type TableWithMetatable {
+	asdf: number,
+	qwerty: string?,
+	__: {
+		// don't have to specify the type of built-in
+		// metamethods bc we already know what they are.
+		// this just means you have to define it with the
+		// standard type
+		__eq,
+		__index,
+		arbitraryKey: bool?,
+	},
+}
+
+let x: TableWithMetatable = {
+	asdf = 3,
+	qwerty = "hi!",
+	__ = {
+		// type of "key" is inferred
+		// => = self function
+		__index = (key) => {
+			rawget(@, key) // @ = self
+		}
+	}
+}
